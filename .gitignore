@@ -1,0 +1,21 @@
+# Local environment
+
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+node_modules/
+.next/
+out/
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# OS files
+.DS_Store
+Thumbs.db

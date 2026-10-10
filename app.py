@@ -1,10 +1,12 @@
 import json
 import os
-from typing import Dict, Any
 
 import boto3
 from botocore.exceptions import ClientError
-from flask import Flask, render_template_string, request, jsonify
+from dotenv import load_dotenv
+from flask import Flask, jsonify, render_template_string, request
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -421,7 +423,7 @@ def invoke_bedrock(prompt: str) -> str:
     except ClientError as exc:
         error_code = exc.response.get("Error", {}).get("Code", "Unknown")
         error_message = exc.response.get("Error", {}).get("Message", str(exc))
-        
+
         if error_code == "AccessDeniedException":
             return f"AWS Access Error: Check that Bedrock model access is enabled in your AWS console for region {AWS_REGION}."
         elif error_code == "ModelNotFound":
@@ -448,8 +450,7 @@ def recommend():
 
     if "Error" in result or "error" in result.lower():
         return jsonify({"success": False, "error": result})
-    else:
-        return jsonify({"success": True, "result": result})
+    return jsonify({"success": True, "result": result})
 
 
 @app.errorhandler(404)

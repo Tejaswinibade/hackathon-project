@@ -2,6 +2,10 @@
 
 FireSmartTV is an AI-powered Fire TV companion that helps viewers find the right content based on mood, family preferences, time of day, and streaming interests. It uses Amazon Bedrock to generate personalized recommendations and make TV browsing faster and more enjoyable.
 
+## Project goal
+
+FireSmartTV reduces content overload by turning a large streaming catalog into a guided, personalized discovery experience. Instead of manually browsing through endless options, a viewer can express their mood, audience, and time-of-day context, and the app recommends content that fits the moment.
+
 ## Why this matters
 Many modern TV interfaces overwhelm users with endless choices. FireSmartTV solves this by turning a broad content catalog into a guided, personalized viewing experience using AI.
 

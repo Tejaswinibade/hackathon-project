@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+        
+        button {
+            padding: 15px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-action {
+            background: #FF6B6B;
+            color: white;
+        }
+        
+        .btn-action:hover {
+            background: #ee5a52;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-comedy {
+            background: #FFA500;
+            color: white;
+        }
+        
+        .btn-comedy:hover {
+            background: #ff9500;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+        }
+        
+        .btn-family {
+            background: #4ECDC4;
+            color: white;
+        }
+        
+        .btn-family:hover {
+            background: #45b8b8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(78, 205, 196, 0.3);
+        }
+        
+        .btn-trending {
+            background: #95E1D3;
+            color: white;
+        }
+        
+        .btn-trending:hover {
+            background: #85d5c8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(149, 225, 211, 0.3);
+        }
+        
+        #result {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 18px;
+            color: #333;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        #result.active {
+            background: #e8f4f8;
+            border-left-color: #4ECDC4;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 Movie Recommender</h1>
+        <p class="subtitle">Choose your mood and get a recommendation!</p>
+        
+        <div class="button-group">
+            <button class="btn-action" onclick="handleRecommendation('action')">Action</button>
+            <button class="btn-comedy" onclick="handleRecommendation('comedy')">Comedy</button>
+            <button class="btn-family" onclick="handleRecommendation('family')">Family</button>
+            <button class="btn-trending" onclick="handleRecommendation('trending')">Trending</button>
+        </div>
+        
+        <div id="result">Select a category above to get started!</div>
+        
+        <div class="footer">
+            <p>Powered by AI & AWS | Hackathon Project</p>
+        </div>
+    </div>
+    
+    <script src="recommend.js"></script>
+    <script>
+        function handleRecommendation(category) {
+            const result = document.getElementById("result");
+            result.classList.add("active");
+            recommend(category);
+            
+            // Remove active class after animation
+            setTimeout(() => {
+                result.classList.remove("active");
+            }, 500);
+        }
+    </script>
+</body>
+</html>

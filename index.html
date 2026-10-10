@@ -1,169 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Recommendation App</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Mood Match</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      :root {
+        --bg-1: #0f172a;
+        --bg-2: #1e293b;
+        --panel: rgba(15, 23, 42, 0.75);
+        --panel-2: rgba(30, 41, 59, 0.9);
+        --card: #111827;
+        --text: #e5e7eb;
+        --muted: #cbd5e1;
+        --primary: #8b5cf6;
+        --secondary: #22c55e;
+        --accent: #f59e0b;
+        --danger: #ef4444;
+        --shadow: rgba(0, 0, 0, 0.35);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+        color: var(--text);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 20px;
+      }
+
+      .app {
+        width: min(100%, 1100px);
+        background: var(--panel);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        box-shadow: 0 30px 80px var(--shadow);
+        overflow: hidden;
+      }
+
+      .header {
+        padding: 40px 40px 20px;
+        text-align: center;
+      }
+
+      .badge {
+        display: inline-block;
+        border: 1px solid rgba(167, 139, 250, 0.5);
+        background: rgba(139, 92, 246, 0.15);
+        color: #ddd6fe;
+        border-radius: 999px;
+        padding: 8px 16px;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 18px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.2rem, 4vw, 3.4rem);
+        line-height: 1.1;
+      }
+
+      .subtitle {
+        margin: 14px auto 0;
+        color: var(--muted);
+        font-size: 1rem;
+        max-width: 650px;
+      }
+
+      .content {
+        padding: 0 40px 40px;
+      }
+
+      .category-bar {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin: 24px 0 28px;
+      }
+
+      .category-btn {
+        appearance: none;
+        border: none;
+        border-radius: 16px;
+        padding: 18px 14px;
+        font-size: 0.96rem;
+        font-weight: 700;
+        color: white;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      }
+
+      .category-btn:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.08);
+      }
+
+      .category-btn:active {
+        transform: translateY(0);
+      }
+
+      .action { background: linear-gradient(135deg, #f97316, #ef4444); }
+      .comedy { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+      .family { background: linear-gradient(135deg, #10b981, #22c55e); }
+      .trending { background: linear-gradient(135deg, #3b82f6, #8b5cf6); }
+
+      .result-box {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 22px;
+        padding: 26px 24px;
+        margin-bottom: 28px;
+      }
+
+      .result-label {
+        display: inline-block;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #cbd5e1;
+        margin-bottom: 12px;
+      }
+
+      #result {
+        margin: 0;
+        font-size: clamp(1.2rem, 2vw, 1.7rem);
+        line-height: 1.5;
+        color: #f8fafc;
+      }
+
+      .movies-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+      }
+
+      .movie-card {
+        background: linear-gradient(180deg, rgba(17, 24, 39, 0.96), rgba(15, 23, 42, 0.9));
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease, border-color 0.2s ease;
+      }
+
+      .movie-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(139, 92, 246, 0.6);
+      }
+
+      .movie-poster {
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.2));
+      }
+
+      .movie-body {
+        padding: 18px 16px 20px;
+      }
+
+      .movie-title {
+        margin: 0 0 6px;
+        font-size: 1.2rem;
+      }
+
+      .movie-meta {
+        color: #a5b4fc;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+      }
+
+      .movie-desc {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+        font-size: 0.96rem;
+      }
+
+      @media (max-width: 760px) {
+        .category-bar {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+
+        .header,
+        .content {
+          padding-left: 20px;
+          padding-right: 20px;
         }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 50px 40px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-        
-        .subtitle {
-            color: #666;
-            margin-bottom: 40px;
-            font-size: 14px;
-        }
-        
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 40px;
-        }
-        
-        button {
-            padding: 15px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .btn-action {
-            background: #FF6B6B;
-            color: white;
-        }
-        
-        .btn-action:hover {
-            background: #ee5a52;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
-        }
-        
-        .btn-comedy {
-            background: #FFA500;
-            color: white;
-        }
-        
-        .btn-comedy:hover {
-            background: #ff9500;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
-        }
-        
-        .btn-family {
-            background: #4ECDC4;
-            color: white;
-        }
-        
-        .btn-family:hover {
-            background: #45b8b8;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(78, 205, 196, 0.3);
-        }
-        
-        .btn-trending {
-            background: #95E1D3;
-            color: white;
-        }
-        
-        .btn-trending:hover {
-            background: #85d5c8;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(149, 225, 211, 0.3);
-        }
-        
-        #result {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 25px;
-            border-radius: 10px;
-            font-size: 18px;
-            color: #333;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        #result.active {
-            background: #e8f4f8;
-            border-left-color: #4ECDC4;
-        }
-        
-        .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #999;
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="container">
-        <h1>🎬 Movie Recommender</h1>
-        <p class="subtitle">Choose your mood and get a recommendation!</p>
-        
-        <div class="button-group">
-            <button class="btn-action" onclick="handleRecommendation('action')">Action</button>
-            <button class="btn-comedy" onclick="handleRecommendation('comedy')">Comedy</button>
-            <button class="btn-family" onclick="handleRecommendation('family')">Family</button>
-            <button class="btn-trending" onclick="handleRecommendation('trending')">Trending</button>
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div class="badge">AI Movie Match</div>
+        <h1>🎬 Pick your movie mood</h1>
+        <p class="subtitle">
+          Choose a vibe and discover the perfect watch for tonight.
+        </p>
+      </header>
+
+      <main class="content">
+        <div class="category-bar">
+          <button class="category-btn action" onclick="handleRecommendation('action')">🔥 Action</button>
+          <button class="category-btn comedy" onclick="handleRecommendation('comedy')">😂 Comedy</button>
+          <button class="category-btn family" onclick="handleRecommendation('family')">👨‍👩‍👧‍👦 Family</button>
+          <button class="category-btn trending" onclick="handleRecommendation('trending')">⭐ Trending</button>
         </div>
-        
-        <div id="result">Select a category above to get started!</div>
-        
-        <div class="footer">
-            <p>Powered by AI & AWS | Hackathon Project</p>
-        </div>
+
+        <section class="result-box">
+          <span class="result-label">Tonight's pick</span>
+          <p id="result">Choose a category to get personalized suggestions.</p>
+        </section>
+
+        <section id="movie-grid" class="movies-grid" aria-live="polite"></section>
+      </main>
     </div>
-    
+
     <script src="recommend.js"></script>
     <script>
-        function handleRecommendation(category) {
-            const result = document.getElementById("result");
-            result.classList.add("active");
-            recommend(category);
-            
-            // Remove active class after animation
-            setTimeout(() => {
-                result.classList.remove("active");
-            }, 500);
-        }
+      function handleRecommendation(category) {
+        recommend(category);
+      }
     </script>
-</body>
+  </body>
 </html>

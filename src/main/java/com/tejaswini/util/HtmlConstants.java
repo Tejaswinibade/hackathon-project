@@ -1,5 +1,9 @@
 package com.tejaswini.util;
 
+/**
+ * HTML UI template for the FireSmartTV application.
+ * Centralizes the static HTML, CSS, and JavaScript for the recommendation interface.
+ */
 public class HtmlConstants {
 
     public static final String HOME_PAGE = """
